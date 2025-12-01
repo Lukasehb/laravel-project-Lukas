@@ -18,6 +18,7 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
+        $admin = User::where('email', 'admin@ehb.be')->first();
          User::create([
              'name' => 'Admin User',
              'username' => 'admin',

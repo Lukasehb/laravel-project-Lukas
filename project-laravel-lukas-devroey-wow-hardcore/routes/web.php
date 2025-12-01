@@ -4,6 +4,7 @@ use App\Http\Controllers\admin\NewsController;
 use App\Http\Controllers\Admin\NewsController as AdminNewsController;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\Admin\AdminUserController;
 
 Route::get('/', function () {
     return view('welcome');
@@ -19,17 +20,16 @@ Route::middleware('auth')->group(function () {
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
 
     // Admin Routes (Gegroepeerd + Middleware)
-    Route::middleware('admin')->prefix('admin')->name('admin.')->group(function () {
-        // Resource Controller voor volledige CRUD
-        Route::resource('news', AdminNewsController::class);
+    Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(function () {
+        Route::resource('news', AdminNewsController::class); // <--- Let op de alias hier
         Route::resource('users', AdminUserController::class);
     });
-});
 
 Route::controller(NewsController::class)->group(function () {
     Route::get('/', 'index')->name('home');
     Route::get('/news', 'index')->name('news.index');
     Route::get('/news/{newsItem}', 'show')->name('news.show');
+    });
 });
 
 Route::middleware(['auth', 'admin'])->resource('admin/news', AdminNewsController::class);
