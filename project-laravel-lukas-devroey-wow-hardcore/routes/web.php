@@ -1,6 +1,7 @@
 <?php
 
-use App\Http\Controllers\AdminUserController;
+use App\Http\Controllers\NewsController;
+use App\Http\Controllers\Admin\NewsController as AdminNewsController;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 
@@ -13,24 +14,23 @@ Route::get('/dashboard', function () {
 })->middleware(['auth', 'verified'])->name('dashboard');
 
 Route::middleware('auth')->group(function () {
+    // Profiel routes
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
-    Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+
+    // Admin Routes (Gegroepeerd + Middleware)
+    Route::middleware('admin')->prefix('admin')->name('admin.')->group(function () {
+        // Resource Controller voor volledige CRUD
+        Route::resource('news', AdminNewsController::class);
+        Route::resource('users', AdminUserController::class);
+    });
 });
 
-Route::middleware(['auth', 'admin'])->group(function () {
-    Route::resource('admin/users', AdminUserController::class);
-    Route::get('admin/users/{user}/toggle-admin', [AdminUserController::class, 'index'])->name('admin.users.index');
+Route::controller(NewsController::class)->group(function () {
+    Route::get('/', 'index')->name('home');
+    Route::get('/news', 'index')->name('news.index');
+    Route::get('/news/{newsItem}', 'show')->name('news.show');
 });
-
-Route::get('/profile/{user}', [ProfileController::class, 'show'])->name('profile.show');
-Route::middleware('auth')->group(function () {
-    Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
-    Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
-});
-
-Route::get('/news', [NewsController::class, 'index'])->name('news.index');
-Route::get('/news/{newsItem}', [NewsController::class, 'show'])->name('news.show');
 
 Route::middleware(['auth', 'admin'])->resource('admin/news', AdminNewsController::class);
 
