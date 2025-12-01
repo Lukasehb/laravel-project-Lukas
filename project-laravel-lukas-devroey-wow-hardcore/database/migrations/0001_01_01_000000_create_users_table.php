@@ -13,10 +13,15 @@ return new class extends Migration
     {
         Schema::create('users', function (Blueprint $table) {
             $table->id();
-            $table->string('name');
+            $table->string('name'); // Officiële naam
+            $table->string('username')->nullable()->unique(); // Publieke naam
             $table->string('email')->unique();
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
+            $table->boolean('is_admin')->default(false); // Admin rol
+            $table->date('birthday')->nullable();
+            $table->string('avatar')->nullable(); // Pad naar afbeelding
+            $table->text('about_me')->nullable();
             $table->rememberToken();
             $table->timestamps();
         });
@@ -37,9 +42,7 @@ return new class extends Migration
         });
     }
 
-    /**
-     * Reverse the migrations.
-     */
+
     public function down(): void
     {
         Schema::dropIfExists('users');
