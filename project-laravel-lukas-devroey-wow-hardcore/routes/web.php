@@ -29,7 +29,7 @@ Route::middleware('auth')->group(function () {
         Route::resource('news', AdminNewsController::class);
 
         Route::resource('users', AdminUserController::class);
-       
+
         Route::patch('/users/{user}/toggle', [AdminUserController::class, 'toggleAdmin'])->name('users.toggle');
     });
 });
