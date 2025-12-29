@@ -16,6 +16,8 @@ Route::controller(NewsController::class)->group(function () {
 // Voeg deze regel toe:
 Route::get('/faq', [FaqController::class, 'index'])->name('faq.index');
 
+Route::get('/user/{user}', [ProfileController::class, 'show'])->name('profile.public');
+
 Route::get('/welcome', function () {
     return view('welcome');
 });

@@ -3,10 +3,12 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\ProfileUpdateRequest;
+use App\Models\User;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Redirect;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\View\View;
 
 class ProfileController extends Controller
@@ -22,29 +24,40 @@ class ProfileController extends Controller
     }
 
     /**
+     * Publieke profielpagina tonen
+     */
+    public function show(User $user): View
+    {
+        return view('profile.show', compact('user'));
+    }
+
+    /**
      * Update the user's profile information.
      */
-    public function update(Request $request)
+    public function update(ProfileUpdateRequest $request): RedirectResponse
     {
-        $user = auth()->user();
+        $user = $request->user();
+        $data = $request->validated();
 
-        $validated = $request->validate([
-            'username' => 'required|string|max:255|unique:users,username,' . $user->id, // Negeer eigen ID bij unieke check
-            'birthday' => 'nullable|date',
-            'about_me' => 'nullable|string|max:500',
-            'avatar' => 'nullable|image|max:2048' // Max 2MB
-        ]);
-
-        // Image Upload Logica
+        // Foto upload logica
         if ($request->hasFile('avatar')) {
-            // Slaat op in storage/app/public/avatars
-            $path = $request->file('avatar')->store('avatars', 'public');
-            $validated['avatar'] = $path;
+            // Verwijder oude foto als die bestaat
+            if ($user->avatar) {
+                Storage::disk('public')->delete($user->avatar);
+            }
+            $data['avatar'] = $request->file('avatar')->store('avatars', 'public');
         }
 
-        $user->update($validated);
+        $user->fill($data);
 
-        return redirect()->route('profile.edit')->with('status', 'profile-updated');
+        // Reset email verificatie als email wijzigt
+        if ($user->isDirty('email')) {
+            $user->email_verified_at = null;
+        }
+
+        $user->save();
+
+        return Redirect::route('profile.edit')->with('status', 'profile-updated');
     }
 
     /**
@@ -59,6 +72,10 @@ class ProfileController extends Controller
         $user = $request->user();
 
         Auth::logout();
+
+        if ($user->avatar) {
+            Storage::disk('public')->delete($user->avatar);
+        }
 
         $user->delete();
 
