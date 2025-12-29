@@ -1,9 +1,10 @@
 <?php
 
 use App\Http\Controllers\ProfileController;
-use App\Http\Controllers\NewsController; // Publieke controller
-use App\Http\Controllers\Admin\NewsController as AdminNewsController; // Admin controller met alias
-use App\Http\Controllers\Admin\AdminUserController; // Admin user controller
+use App\Http\Controllers\NewsController;
+use App\Http\Controllers\FaqController; // <--- Toevoegen
+use App\Http\Controllers\Admin\NewsController as AdminNewsController;
+use App\Http\Controllers\Admin\AdminUserController;
 use Illuminate\Support\Facades\Route;
 
 Route::controller(NewsController::class)->group(function () {
@@ -11,6 +12,9 @@ Route::controller(NewsController::class)->group(function () {
     Route::get('/news', 'index')->name('news.index');
     Route::get('/news/{newsItem}', 'show')->name('news.show');
 });
+
+// Voeg deze regel toe:
+Route::get('/faq', [FaqController::class, 'index'])->name('faq.index');
 
 Route::get('/welcome', function () {
     return view('welcome');
@@ -25,11 +29,8 @@ Route::middleware('auth')->group(function () {
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
 
     Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(function () {
-
         Route::resource('news', AdminNewsController::class);
-
         Route::resource('users', AdminUserController::class);
-
         Route::patch('/users/{user}/toggle', [AdminUserController::class, 'toggleAdmin'])->name('users.toggle');
     });
 });
