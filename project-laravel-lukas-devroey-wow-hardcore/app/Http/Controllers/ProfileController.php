@@ -24,7 +24,7 @@ class ProfileController extends Controller
     /**
      * Update the user's profile information.
      */
-    public function update(ProfileUpdateRequest $request): RedirectResponse
+    public function update(Request $request)
     {
         $user = auth()->user();
 
@@ -35,15 +35,16 @@ class ProfileController extends Controller
             'avatar' => 'nullable|image|max:2048' // Max 2MB
         ]);
 
+        // Image Upload Logica
         if ($request->hasFile('avatar')) {
             // Slaat op in storage/app/public/avatars
             $path = $request->file('avatar')->store('avatars', 'public');
             $validated['avatar'] = $path;
         }
 
-        $request->user()->save();
+        $user->update($validated);
 
-        return Redirect::route('profile.edit')->with('status', 'profile-updated');
+        return redirect()->route('profile.edit')->with('status', 'profile-updated');
     }
 
     /**
