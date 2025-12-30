@@ -35,6 +35,14 @@ Route::middleware('auth')->group(function () {
         Route::resource('news', AdminNewsController::class);
         Route::resource('users', AdminUserController::class);
         Route::patch('/users/{user}/toggle', [AdminUserController::class, 'toggleAdmin'])->name('users.toggle');
+
+        Route::get('/faq', [App\Http\Controllers\Admin\FaqController::class, 'index'])->name('faq.index');
+        Route::post('/faq/category', [App\Http\Controllers\Admin\FaqController::class, 'storeCategory'])->name('faq.category.store');
+        Route::delete('/faq/category/{category}', [App\Http\Controllers\Admin\FaqController::class, 'destroyCategory'])->name('faq.category.destroy');
+
+        Route::get('/faq/item/create', [App\Http\Controllers\Admin\FaqController::class, 'createItem'])->name('faq.item.create');
+        Route::post('/faq/item', [App\Http\Controllers\Admin\FaqController::class, 'storeItem'])->name('faq.item.store');
+        Route::delete('/faq/item/{faqItem}', [App\Http\Controllers\Admin\FaqController::class, 'destroyItem'])->name('faq.item.destroy');
     });
 });
 

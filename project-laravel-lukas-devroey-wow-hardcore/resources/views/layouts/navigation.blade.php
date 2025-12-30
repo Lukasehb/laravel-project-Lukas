@@ -3,55 +3,74 @@
         <div class="flex justify-between h-16">
             <div class="flex">
                 <div class="shrink-0 flex items-center">
-                    <a href="{{ route('dashboard') }}" class="font-wow font-bold text-xl tracking-widest text-wow-gold">
+                    <a href="{{ route('home') }}" class="font-wow font-bold text-xl tracking-widest text-wow-gold">
                         WoW <span class="text-wow-red">HC</span>
                     </a>
                 </div>
 
                 <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
-                    <x-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')" class="text-gray-300 hover:text-wow-gold active:text-wow-gold">
-                        {{ __('Dashboard') }}
-                    </x-nav-link>
                     <x-nav-link :href="route('home')" :active="request()->routeIs('home')" class="text-gray-300 hover:text-wow-gold">
-                        {{ __('Website Home') }}
+                        {{ __('Home') }}
                     </x-nav-link>
+                    <x-nav-link :href="route('news.index')" :active="request()->routeIs('news.index')" class="text-gray-300 hover:text-wow-gold">
+                        {{ __('Nieuws') }}
+                    </x-nav-link>
+                    <x-nav-link :href="route('faq.index')" :active="request()->routeIs('faq.index')" class="text-gray-300 hover:text-wow-gold">
+                        {{ __('FAQ') }}
+                    </x-nav-link>
+
+                    @auth
+                        <x-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')" class="text-gray-300 hover:text-wow-gold">
+                            {{ __('Dashboard') }}
+                        </x-nav-link>
+
+                        @if(Auth::user()->is_admin)
+                            <x-nav-link :href="route('admin.news.index')" :active="request()->routeIs('admin.*')" class="text-wow-red border-wow-red hover:text-red-500 font-bold">
+                                {{ __('Admin Panel') }}
+                            </x-nav-link>
+                        @endif
+                    @endauth
                 </div>
             </div>
 
             <div class="hidden sm:flex sm:items-center sm:ms-6">
-                <x-dropdown align="right" width="48">
-                    <x-slot name="trigger">
-                        <button class="inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md text-wow-gold bg-wow-panel border-wow-border hover:text-white focus:outline-none transition ease-in-out duration-150">
-                            <div>{{ Auth::user()->username ?? Auth::user()->name }}</div>
+                @auth
+                    <x-dropdown align="right" width="48">
+                        <x-slot name="trigger">
+                            <button class="inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md text-wow-gold bg-wow-panel border-wow-border hover:text-white focus:outline-none transition ease-in-out duration-150">
+                                <div>{{ Auth::user()->username ?? Auth::user()->name }}</div>
 
-                            <div class="ms-1">
-                                <svg class="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
-                                    <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd" />
-                                </svg>
-                            </div>
-                        </button>
-                    </x-slot>
+                                <div class="ms-1">
+                                    <svg class="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
+                                        <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd" />
+                                    </svg>
+                                </div>
+                            </button>
+                        </x-slot>
 
-                    <x-slot name="content">
-                        <x-dropdown-link :href="route('profile.edit')">
-                            {{ __('Instellingen') }}
-                        </x-dropdown-link>
-
-                        <x-dropdown-link :href="route('profile.public', Auth::user())">
-                            {{ __('Mijn Publiek Profiel') }}
-                        </x-dropdown-link>
-
-                        <form method="POST" action="{{ route('logout') }}">
-                            @csrf
-
-                            <x-dropdown-link :href="route('logout')"
-                                             onclick="event.preventDefault();
-                                                this.closest('form').submit();">
-                                {{ __('Log Out') }}
+                        <x-slot name="content">
+                            <x-dropdown-link :href="route('profile.edit')">
+                                {{ __('Instellingen') }}
                             </x-dropdown-link>
-                        </form>
-                    </x-slot>
-                </x-dropdown>
+
+                            <x-dropdown-link :href="route('profile.public', Auth::user())">
+                                {{ __('Mijn Publiek Profiel') }}
+                            </x-dropdown-link>
+
+                            <form method="POST" action="{{ route('logout') }}">
+                                @csrf
+                                <x-dropdown-link :href="route('logout')" onclick="event.preventDefault(); this.closest('form').submit();">
+                                    {{ __('Log Out') }}
+                                </x-dropdown-link>
+                            </form>
+                        </x-slot>
+                    </x-dropdown>
+                @else
+                    <div class="space-x-4">
+                        <a href="{{ route('login') }}" class="text-sm text-gray-400 hover:text-white transition">Login</a>
+                        <a href="{{ route('register') }}" class="text-sm text-wow-gold border border-wow-gold px-3 py-1 rounded hover:bg-wow-gold hover:text-black transition">Register</a>
+                    </div>
+                @endauth
             </div>
 
             <div class="-me-2 flex items-center sm:hidden">
@@ -67,32 +86,52 @@
 
     <div :class="{'block': open, 'hidden': ! open}" class="hidden sm:hidden bg-wow-panel border-t border-gray-800">
         <div class="pt-2 pb-3 space-y-1">
-            <x-responsive-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')" class="text-gray-300 hover:text-wow-gold">
-                {{ __('Dashboard') }}
+            <x-responsive-nav-link :href="route('home')" :active="request()->routeIs('home')" class="text-gray-300 hover:text-wow-gold">
+                {{ __('Home') }}
             </x-responsive-nav-link>
+
+            @auth
+                <x-responsive-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')" class="text-gray-300 hover:text-wow-gold">
+                    {{ __('Dashboard') }}
+                </x-responsive-nav-link>
+
+                @if(Auth::user()->is_admin)
+                    <x-responsive-nav-link :href="route('admin.news.index')" :active="request()->routeIs('admin.*')" class="text-wow-red">
+                        {{ __('Admin Panel') }}
+                    </x-responsive-nav-link>
+                @endif
+            @endauth
         </div>
 
         <div class="pt-4 pb-1 border-t border-gray-800">
-            <div class="px-4">
-                <div class="font-medium text-base text-wow-gold">{{ Auth::user()->name }}</div>
-                <div class="font-medium text-sm text-gray-500">{{ Auth::user()->email }}</div>
-            </div>
+            @auth
+                <div class="px-4">
+                    <div class="font-medium text-base text-wow-gold">{{ Auth::user()->name }}</div>
+                    <div class="font-medium text-sm text-gray-500">{{ Auth::user()->email }}</div>
+                </div>
 
-            <div class="mt-3 space-y-1">
-                <x-responsive-nav-link :href="route('profile.edit')">
-                    {{ __('Profile') }}
-                </x-responsive-nav-link>
-
-                <form method="POST" action="{{ route('logout') }}">
-                    @csrf
-
-                    <x-responsive-nav-link :href="route('logout')"
-                                           onclick="event.preventDefault();
-                                        this.closest('form').submit();">
-                        {{ __('Log Out') }}
+                <div class="mt-3 space-y-1">
+                    <x-responsive-nav-link :href="route('profile.edit')">
+                        {{ __('Profile') }}
                     </x-responsive-nav-link>
-                </form>
-            </div>
+
+                    <form method="POST" action="{{ route('logout') }}">
+                        @csrf
+                        <x-responsive-nav-link :href="route('logout')" onclick="event.preventDefault(); this.closest('form').submit();">
+                            {{ __('Log Out') }}
+                        </x-responsive-nav-link>
+                    </form>
+                </div>
+            @else
+                <div class="mt-3 space-y-1 px-4">
+                    <x-responsive-nav-link :href="route('login')">
+                        {{ __('Login') }}
+                    </x-responsive-nav-link>
+                    <x-responsive-nav-link :href="route('register')">
+                        {{ __('Register') }}
+                    </x-responsive-nav-link>
+                </div>
+            @endauth
         </div>
     </div>
 </nav>

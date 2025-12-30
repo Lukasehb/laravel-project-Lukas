@@ -11,25 +11,27 @@ use Illuminate\Support\Facades\Hash;
 
 class DatabaseSeeder extends Seeder
 {
-    use WithoutModelEvents;
-
     /**
      * Seed the application's database.
      */
     public function run(): void
     {
-        $admin = User::where('email', 'admin@ehb.be')->first();
-         User::create([
-             'name' => 'Admin User',
-             'username' => 'admin',
-             'email' => 'admin@ehb.be',
-             'password' => Hash::make('Password!321'),
-             'is_admin' => true,
-             'email_verified_at' => now(),]);
+        // 1. Admin aanmaken (alleen als deze nog niet bestaat)
+        User::firstOrCreate(
+            ['email' => 'admin@ehb.be'], // Check op dit veld
+            [
+                'name' => 'Admin User',
+                'username' => 'admin',
+                'password' => Hash::make('Password!321'),
+                'is_admin' => true,
+                'email_verified_at' => now(),
+            ]
+        );
 
-
+        // 2. Dummy users
         User::factory(10)->create();
 
+        // 3. FAQ Data
         $cat = FaqCategory::create(['name' => 'Algemeen']);
         FaqItem::create([
             'faq_category_id' => $cat->id,
@@ -37,6 +39,7 @@ class DatabaseSeeder extends Seeder
             'answer' => 'Via de knop rechtsboven.'
         ]);
 
+        // 4. Nieuws Data
         NewsItem::factory(5)->create();
     }
 }

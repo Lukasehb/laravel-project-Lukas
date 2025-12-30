@@ -11,18 +11,18 @@
                 <div class="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-wow-red to-transparent"></div>
 
                 <div class="p-8 text-gray-300">
-                    <h3 class="text-2xl font-wow text-white mb-4">Welkom, kampioen {{ Auth::user()->username ?? Auth::user()->name }}</h3>
-                    <p class="mb-6 text-gray-400">{{ __("Je bent succesvol ingelogd. Bereid je voor op je volgende avontuur.") }}</p>
+                    <h3 class="text-2xl font-wow text-white mb-4">Welcom, adventurer {{ Auth::user()->username ?? Auth::user()->name }}</h3>
+                    <p class="mb-6 text-gray-400">{{ __("You succesfully logged in. Prepare yourself for you next adventure.") }}</p>
 
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-6">
                         <a href="{{ route('profile.public', Auth::user()) }}" class="block p-4 bg-black border border-gray-800 rounded hover:border-wow-gold transition group">
-                            <span class="text-wow-gold font-bold group-hover:text-white">Bekijk mijn profiel &rarr;</span>
-                            <p class="text-xs text-gray-500 mt-1">Zie hoe anderen jouw held zien.</p>
+                            <span class="text-wow-gold font-bold group-hover:text-white">My profile &rarr;</span>
+                            <p class="text-xs text-gray-500 mt-1">See how other people see you.</p>
                         </a>
 
                         <a href="{{ route('profile.edit') }}" class="block p-4 bg-black border border-gray-800 rounded hover:border-wow-gold transition group">
-                            <span class="text-wow-gold font-bold group-hover:text-white">Bewerk gegevens &rarr;</span>
-                            <p class="text-xs text-gray-500 mt-1">Pas je avatar, wachtwoord en info aan.</p>
+                            <span class="text-wow-gold font-bold group-hover:text-white">Edit profile &rarr;</span>
+                            <p class="text-xs text-gray-500 mt-1">Edit avatar, password and info.</p>
                         </a>
                     </div>
                 </div>

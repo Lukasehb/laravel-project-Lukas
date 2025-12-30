@@ -22,7 +22,7 @@
                     </h1>
 
                     <div class="text-gray-500 text-sm mb-6 flex items-center gap-4">
-                        <span>Level {{ $user->id }} Human</span>
+                        <span>Level {{ $user->id }} Night elf</span>
                         @if($user->birthday)
                             <span class="text-wow-red">•</span>
                             <span>{{ \Carbon\Carbon::parse($user->birthday)->format('d M Y') }}</span>
@@ -30,9 +30,9 @@
                     </div>
 
                     <div class="bg-black/30 p-6 rounded border border-wow-border">
-                        <h3 class="text-wow-gold font-wow text-lg mb-2 border-b border-gray-800 pb-1">Over Mij</h3>
+                        <h3 class="text-wow-gold font-wow text-lg mb-2 border-b border-gray-800 pb-1">About me</h3>
                         <p class="text-gray-400 italic leading-relaxed">
-                            {{ $user->about_me ?? 'Deze speler heeft nog geen beschrijving.' }}
+                            {{ $user->about_me ?? 'This player has no description.' }}
                         </p>
                     </div>
                 </div>

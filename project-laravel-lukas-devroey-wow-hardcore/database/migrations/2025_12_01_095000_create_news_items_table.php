@@ -13,9 +13,10 @@ return new class extends Migration
     {
         Schema::create('news_items', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('faq_category_id')->constrained()->onDelete('cascade');
-            $table->string('question');
-            $table->text('answer');
+            $table->string('title'); // Titel van het nieuwsbericht
+            $table->text('content'); // Inhoud
+            $table->string('image_path')->nullable(); // Pad naar afbeelding (optioneel)
+            $table->date('published_at'); // Publicatiedatum
             $table->timestamps();
         });
     }

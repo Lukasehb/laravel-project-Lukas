@@ -3,47 +3,104 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Models\NewsItem;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 
 class NewsController extends Controller
 {
+    /**
+     * Toon lijst met nieuwsberichten.
+     */
+    public function index()
+    {
+        $newsItems = NewsItem::latest()->paginate(10);
+        return view('admin.news.index', compact('newsItems'));
+    }
+
+    /**
+     * Toon formulier om nieuw bericht te maken.
+     */
+    public function create()
+    {
+        return view('admin.news.create');
+    }
+
+    /**
+     * Sla nieuw bericht op in database.
+     */
     public function store(Request $request)
     {
         $validated = $request->validate([
-            'title' => 'required',
-            'content' => 'required',
-            'image' => 'required|image',
-            'tags' => 'array', // Verwacht een array van tag IDs
-            'tags.*' => 'exists:tags,id' // Check of ID bestaat in tags tabel
+            'title' => 'required|string|max:255',
+            'content' => 'required|string',
+            'published_at' => 'required|date',
+            'image' => 'nullable|image|max:2048',
         ]);
 
-        $path = $request->file('image')->store('news', 'public');
+        if ($request->hasFile('image')) {
+            $validated['image_path'] = $request->file('image')->store('news_images', 'public');
+        }
 
-        $newsItem = NewsItem::create([
+        NewsItem::create([
             'title' => $validated['title'],
             'content' => $validated['content'],
-            'image_path' => $path,
-            'published_at' => now(),
+            'published_at' => $validated['published_at'],
+            'image_path' => $validated['image_path'] ?? null,
         ]);
 
-        // Many-to-Many koppeling leggen (Pivot table invullen)
-        // $request->tags bevat array van IDs, bijv: [1, 3]
-        if ($request->has('tags')) {
-            $newsItem->tags()->attach($request->tags);
-        }
-
-        return redirect()->route('admin.news.index');
+        return redirect()->route('admin.news.index')->with('success', 'Nieuwsitem aangemaakt!');
     }
 
-    public function update(Request $request, NewsItem $newsItem)
+    /**
+     * Toon bewerk formulier.
+     */
+    public function edit(NewsItem $news)
     {
-        // ... validatie ...
+        return view('admin.news.edit', compact('news'));
+    }
 
-        // Bij update gebruik je sync() in plaats van attach()
-        // sync() verwijdert oude relaties en voegt de nieuwe toe
-        if ($request->has('tags')) {
-            $newsItem->tags()->sync($request->tags);
+    /**
+     * Update bestaand bericht.
+     */
+    public function update(Request $request, NewsItem $news)
+    {
+        $validated = $request->validate([
+            'title' => 'required|string|max:255',
+            'content' => 'required|string',
+            'published_at' => 'required|date',
+            'image' => 'nullable|image|max:2048',
+        ]);
+
+        if ($request->hasFile('image')) {
+            // Oude foto verwijderen indien aanwezig
+            if ($news->image_path) {
+                Storage::disk('public')->delete($news->image_path);
+            }
+            $validated['image_path'] = $request->file('image')->store('news_images', 'public');
         }
 
-        // ... update logic ...
+        $news->update([
+            'title' => $validated['title'],
+            'content' => $validated['content'],
+            'published_at' => $validated['published_at'],
+            'image_path' => $validated['image_path'] ?? $news->image_path,
+        ]);
+
+        return redirect()->route('admin.news.index')->with('success', 'Nieuwsitem bijgewerkt!');
+    }
+
+    /**
+     * Verwijder bericht.
+     */
+    public function destroy(NewsItem $news)
+    {
+        if ($news->image_path) {
+            Storage::disk('public')->delete($news->image_path);
+        }
+
+        $news->delete();
+
+        return redirect()->route('admin.news.index')->with('success', 'Nieuwsitem verwijderd.');
     }
 }

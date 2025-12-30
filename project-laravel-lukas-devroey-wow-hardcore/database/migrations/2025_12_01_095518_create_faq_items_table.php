@@ -13,6 +13,13 @@ return new class extends Migration
     {
         Schema::create('faq_items', function (Blueprint $table) {
             $table->id();
+            // Voeg de relatie toe naar categorieën
+            $table->foreignId('faq_category_id')->constrained('faq_categories')->onDelete('cascade');
+
+            // De vraag en het antwoord
+            $table->text('question');
+            $table->text('answer');
+
             $table->timestamps();
         });
     }
