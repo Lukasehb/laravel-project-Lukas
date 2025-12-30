@@ -1,6 +1,6 @@
 <x-app-layout>
     <x-slot name="header">
-        <h2 class="font-wow text-xl text-wow-gold uppercase">{{ __('Vraag Bewerken') }}</h2>
+        <h2 class="font-wow text-xl text-wow-gold uppercase">{{ __('Vraag & Antwoord Bewerken') }}</h2>
     </x-slot>
 
     <div class="py-12">
@@ -31,7 +31,7 @@
                         <textarea id="answer" name="answer" rows="5" class="block mt-1 w-full bg-black border-gray-700 text-gray-300 rounded shadow-sm focus:border-wow-gold focus:ring-wow-gold" required>{{ $faqItem->answer }}</textarea>
                     </div>
 
-                    <div class="flex items-center gap-4">
+                    <div class="flex items-center gap-4 border-t border-gray-800 pt-4">
                         <x-primary-button class="bg-wow-gold text-black hover:bg-yellow-600 font-bold">
                             {{ __('Opslaan') }}
                         </x-primary-button>
