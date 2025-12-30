@@ -8,7 +8,7 @@ Volg deze stappen om het project lokaal draaiende te krijgen:
 
 1.  **Clone de repository**
     ```bash
-    git clone <JOUW_GITHUB_URL>
+    git clone (https://github.com/Lukasehb/laravel-project-Lukas
     cd project-laravel-lukas-devroey-wow-hardcore
     ```
 
