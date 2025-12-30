@@ -8,6 +8,22 @@ use App\Models\FaqCategory;
 use App\Models\FaqItem;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Hash;
+use App\Models\Tag;
+
+// ...
+$tags = [
+    Tag::create(['name' => 'PvP']),
+    Tag::create(['name' => 'Raiding']),
+    Tag::create(['name' => 'Dungeons']),
+    Tag::create(['name' => 'Leveling']),
+];
+
+NewsItem::all()->each(function ($news) use ($tags) {
+    // Koppel willekeurige tags aan nieuws (Many-to-Many in actie)
+    $news->tags()->attach(
+        collect($tags)->random(rand(1, 2))->pluck('id')
+    );
+});
 
 class DatabaseSeeder extends Seeder
 {
@@ -28,7 +44,7 @@ class DatabaseSeeder extends Seeder
             ]
         );
 
-        // 2. Dummy users
+
         User::factory(10)->create();
 
         // 3. FAQ Data
@@ -39,7 +55,7 @@ class DatabaseSeeder extends Seeder
             'answer' => 'Via de knop rechtsboven.'
         ]);
 
-        // 4. Nieuws Data
+
         NewsItem::factory(5)->create();
     }
 }

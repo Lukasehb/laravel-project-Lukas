@@ -2,10 +2,14 @@
 
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\NewsController;
-use App\Http\Controllers\FaqController; // <--- Toevoegen
+use App\Http\Controllers\FaqController;
+use App\Http\Controllers\ContactController;
 use App\Http\Controllers\Admin\NewsController as AdminNewsController;
 use App\Http\Controllers\Admin\AdminUserController;
 use Illuminate\Support\Facades\Route;
+
+Route::get('/contact', [ContactController::class, 'show'])->name('contact.show');
+Route::post('/contact', [ContactController::class, 'submit'])->name('contact.submit');
 
 Route::controller(NewsController::class)->group(function () {
     Route::get('/', 'index')->name('home');
@@ -13,7 +17,6 @@ Route::controller(NewsController::class)->group(function () {
     Route::get('/news/{newsItem}', 'show')->name('news.show');
 });
 
-// Voeg deze regel toe:
 Route::get('/faq', [FaqController::class, 'index'])->name('faq.index');
 
 Route::get('/user/{user}', [ProfileController::class, 'show'])->name('profile.public');
@@ -42,6 +45,8 @@ Route::middleware('auth')->group(function () {
 
         Route::get('/faq/item/create', [App\Http\Controllers\Admin\FaqController::class, 'createItem'])->name('faq.item.create');
         Route::post('/faq/item', [App\Http\Controllers\Admin\FaqController::class, 'storeItem'])->name('faq.item.store');
+        Route::get('/faq/item/{faqItem}/edit', [App\Http\Controllers\Admin\FaqController::class, 'editItem'])->name('faq.item.edit');
+        Route::put('/faq/item/{faqItem}', [App\Http\Controllers\Admin\FaqController::class, 'updateItem'])->name('faq.item.update');
         Route::delete('/faq/item/{faqItem}', [App\Http\Controllers\Admin\FaqController::class, 'destroyItem'])->name('faq.item.destroy');
     });
 });

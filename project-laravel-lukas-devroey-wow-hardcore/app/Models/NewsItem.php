@@ -19,4 +19,8 @@ class NewsItem extends Model
     protected $casts = [
         'published_at' => 'date',
     ];
+    public function tags()
+    {
+        return $this->belongsToMany(Tag::class);
+    }
 }

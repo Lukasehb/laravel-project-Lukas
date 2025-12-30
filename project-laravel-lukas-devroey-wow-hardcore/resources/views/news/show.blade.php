@@ -36,5 +36,12 @@
 
             <div class="h-2 bg-gradient-to-r from-transparent via-wow-gold to-transparent opacity-20 mt-8"></div>
         </div>
+        <div class="mt-2 flex gap-2">
+            @foreach($item->tags as $tag)
+                <span class="text-xs bg-gray-800 text-gray-400 px-2 py-1 rounded border border-gray-600">
+            #{{ $tag->name }}
+        </span>
+            @endforeach
+        </div>
     </div>
 </x-public-layout>

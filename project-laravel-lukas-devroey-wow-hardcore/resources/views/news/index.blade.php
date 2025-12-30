@@ -46,4 +46,11 @@
             </div>
         @endif
     </div>
+    <div class="mt-2 flex gap-2">
+        @foreach($item->tags as $tag)
+            <span class="text-xs bg-gray-800 text-gray-400 px-2 py-1 rounded border border-gray-600">
+            #{{ $tag->name }}
+        </span>
+        @endforeach
+    </div>
 </x-public-layout>

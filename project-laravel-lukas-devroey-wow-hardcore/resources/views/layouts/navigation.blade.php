@@ -18,6 +18,9 @@
                     <x-nav-link :href="route('faq.index')" :active="request()->routeIs('faq.index')" class="text-gray-300 hover:text-wow-gold">
                         {{ __('FAQ') }}
                     </x-nav-link>
+                    <x-nav-link :href="route('contact.show')" :active="request()->routeIs('contact.show')" class="text-gray-300 hover:text-wow-gold">
+                        {{ __('Contact') }}
+                    </x-nav-link>
 
                     @auth
                         <x-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')" class="text-gray-300 hover:text-wow-gold">

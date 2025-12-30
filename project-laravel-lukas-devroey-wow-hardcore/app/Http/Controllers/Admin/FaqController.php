@@ -45,6 +45,24 @@ class FaqController extends Controller
         FaqItem::create($request->all());
         return redirect()->route('admin.faq.index')->with('success', 'Vraag toegevoegd!');
     }
+    public function editItem(FaqItem $faqItem)
+    {
+        $categories = FaqCategory::all();
+        return view('admin.faq.edit', compact('faqItem', 'categories'));
+    }
+
+    public function updateItem(Request $request, FaqItem $faqItem)
+    {
+        $request->validate([
+            'faq_category_id' => 'required|exists:faq_categories,id',
+            'question' => 'required|string',
+            'answer' => 'required|string',
+        ]);
+
+        $faqItem->update($request->all());
+        return redirect()->route('admin.faq.index')->with('success', 'Vraag en antwoord bijgewerkt!');
+    }
+    // ---------------------------------------
 
     public function destroyItem(FaqItem $faqItem)
     {
