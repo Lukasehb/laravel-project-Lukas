@@ -70,3 +70,4 @@ Het project wordt geleverd met een standaard administrator account zoals vereist
 * **Assets:** Afbeeldingen en logo's zijn eigendom van Blizzard Entertainment (gebruikt voor educatieve doeleinden/fan art).
 * **Cursusmateriaal:** Backend Development cursusmateriaal (Erasmusshogeschool Brussel).
 * **Gemini chats:
+* check vereiste https://gemini.google.com/share/31deeaf06e36
