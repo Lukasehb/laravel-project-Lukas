@@ -2,7 +2,7 @@
 
 Dit project is een content management systeem voor een World of Warcraft Hardcore community website. Het bevat functionaliteiten voor nieuwsbeheer, een FAQ-sectie en gebruikersprofielen met verschillende rollen (Admin/User).
 
-## 🚀 Installatie Handleiding
+## Installatie Handleiding
 
 Volg deze stappen om het project lokaal draaiende te krijgen:
 
@@ -46,7 +46,7 @@ Volg deze stappen om het project lokaal draaiende te krijgen:
     php artisan migrate:fresh --seed
     ```
 
-## 🔑 Inloggegevens
+## Inloggegevens
 
 Het project wordt geleverd met een standaard administrator account zoals vereist:
 
@@ -54,7 +54,7 @@ Het project wordt geleverd met een standaard administrator account zoals vereist
 * **Email:** `admin@ehb.be`
 * **Wachtwoord:** `Password!321`
 
-## 📚 Functionaliteiten
+## Functionaliteiten
 
 * **Nieuws:** Publiek kan nieuws lezen. Admins kunnen nieuwsberichten aanmaken, bewerken en verwijderen en Tags koppelen (Many-to-Many).
 * **FAQ:** Vragen gegroepeerd per categorie. Admins kunnen categorieën en vragen beheren.
@@ -62,10 +62,11 @@ Het project wordt geleverd met een standaard administrator account zoals vereist
 * **Gebruikersbeheer:** Admins kunnen via het dashboard andere gebruikers admin-rechten geven of ontnemen.
 * **Profiel:** Gebruikers kunnen hun profiel aanpassen en hebben een publieke profielpagina.
 
-## 🔗 Bronvermeldingen
+## Bronvermeldingen
 
 * **Framework:** [Laravel 11 Documentation](https://laravel.com/docs)
 * **Authenticatie:** [Laravel Breeze](https://laravel.com/docs/starter-kits#laravel-breeze)
 * **Styling:** [Tailwind CSS](https://tailwindcss.com/)
 * **Assets:** Afbeeldingen en logo's zijn eigendom van Blizzard Entertainment (gebruikt voor educatieve doeleinden/fan art).
 * **Cursusmateriaal:** Backend Development cursusmateriaal (Erasmusshogeschool Brussel).
+* **Gemini chats:
